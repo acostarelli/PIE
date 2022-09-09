@@ -1,11 +1,10 @@
+/** These constants are left in the global scope as parameters for this program
+ * as a whole.*/
 constexpr int led1 = 9;
 constexpr int led2 = 10;
 constexpr int led3 = 11;
-
 constexpr int button = 8;
 constexpr int potent = A5;
-
-constexpr int delay_factor = 5;
 
 /** Convenience function for simultaneous writing. */
 void writeall(int a, int b, int c) {
@@ -15,12 +14,12 @@ void writeall(int a, int b, int c) {
 }
 
 /** Read the button's state.
- * The button must maintain its state for {wait} ms before it is trusted to have actually changed state.
+ * Essentially a wrapper for digitalRead(button) that ignores random/unexpected
+ * state changes.
  */
 bool readbutton() {
   constexpr unsigned long wait = 50;
 
-  /** real_read is the trusted state, last_read is the state that must prove itself. */
   static bool real_read = LOW;
   static bool last_read = LOW;
   static unsigned long last_time = 0;
@@ -28,13 +27,11 @@ bool readbutton() {
   bool read = digitalRead(button);
   unsigned long time = millis();
 
-  /** State change can be trusted. */
   if (time - last_time > wait) {
     real_read = last_read;
     last_time = time;
   }
 
-  /** Not enough time elapsed but the state changed, so reset the timer. */
   if (read != last_read) {
     last_read = read;
     last_time = time;
@@ -43,7 +40,7 @@ bool readbutton() {
   return real_read;
 }
 
-/** Button edge detection. */
+/** Detects when the button is lifted after depression. */
 bool buttonlifted() {
   static bool last = LOW;
   bool now = readbutton();
@@ -65,39 +62,42 @@ void loop() {
   constexpr int n_modes = 5;
   static int mode_i = 0;
 
+  /** Cycle through the modes each time the button is unpressed. */
   if (buttonlifted()) {
     mode_i = (mode_i + 1) % n_modes;
   }
 
-  static unsigned long t0 = millis();
+  static unsigned long t0 = 0;
   const unsigned long t = millis();
 
-  /** Every mode only needs to be updated once per interval,
-   * so don't continue unless enough time has elapsed. */
+  /** Each mode doesn't need to update any earlier than an interval, so don't
+   * continue unless enough time has elapsed. The interval time is given by
+   * the potentiometer reading. */
   if (t - t0 < analogRead(potent)) {
     return;
   }
   t0 = t;
 
-  /** Reset all LEDs to start from scratch for animated modes.
-   * User won't notice flicker for LEDs that are turned back on. */
+  /** Every mode tells which LEDs to turn on, but not every mode tells which
+   * LEDs to turn off. So, default by turning off all LEDs. The time between
+   * this line and the mode code is too short for the user to notice any
+   * LEDs flicker off that should have stayed on. */
   writeall(LOW, LOW, LOW);
 
-  /** Five modes: all off (0), all on (1), flashing (2), marquee (3), wave (4) */
   switch (mode_i) {
-    case 0:
+    case 0: /** All off */
       break;
-    case 1:
+    case 1: /** ALl on */
       writeall(HIGH, HIGH, HIGH);
 
       break;
-    case 2:
+    case 2: /** All flashing */
       static bool on = false;
       writeall(on, on, on);
       on = !on;
 
       break;
-    case 3:
+    case 3: /** "Marquee" */
       /** Light one LED at a time.
        * If LED1 is lit, switch to LED2.
        * If LED2 is lit, switch to LED3.
@@ -107,7 +107,7 @@ void loop() {
       active_led = active_led == led1 ? led2 : (active_led == led2 ? led3 : led1);
 
       break;
-    case 4:
+    case 4: /** "Wave" */
       /** Cycle between 4 states.
        * LED1 is always on.
        * LED2 is on except during during state 0.
