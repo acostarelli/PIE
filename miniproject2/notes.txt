@@ -11,3 +11,7 @@ holds ir sensor looking at disk. ir is mounted on tilt that can look up and
 down at the object on the pan. the pan gear needs to 1:2 so the plate gets
 360 degrees of rotation
 - i feel like the arduino code should be as simple as possible
+
+Assumptions:
+- pan servo is geared 1:2
+- 0 degrees for the tilt is pointing straight up (might not matter)

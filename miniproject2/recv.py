@@ -1,4 +1,4 @@
-from math import abs, exp, pi, sin
+from math import abs, cos, exp, pi, sin
 
 import matplotlib.pyplot as plt
 import serial
@@ -10,9 +10,11 @@ of the scanner (in cm).
 PORT = ""
 BAUD = 115200
 R_IR = 10
+H_IR = 10
 
 
 def degtorad(d):
+    """Converts degrees to radians."""
     return (d / 180) * pi
 
 
@@ -24,12 +26,12 @@ def transfer(v):
     return a * exp(v * b) + c
 
 
-def poltocart(angle_pan, angle_tilt, radius):
-    """Convert polar to cartesian."""
-    d = radius * abs(sin(angle_tilt))
-    d = R_IR - d
+def poltocart(angle_pan, angle_tilt, hypot):
+    """Converts polar to cartesian."""
+    radius = R_IR - hypot * abs(sin(angle_tilt))
+    height = sqrt(hypot**2 - radius**2)
 
-    return (0, 0, 0)
+    return (radius * cos(angle_pan), height, radius * sin(angle_pan))
 
 
 def graph(X, Y, Z):
