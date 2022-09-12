@@ -14,8 +14,8 @@ constexpr int BAUD    = 115200;
 constexpr int DELAY   = 15;
 
 /** Globals */
-constexpr Servo servo_pan;
-constexpr Servo servo_tilt;
+Servo servo_pan;
+Servo servo_tilt;
 
 void send(int angle_pan, int angle_tilt, float radius) {
   Serial.print(angle_pan);
@@ -33,25 +33,36 @@ void end() {
 }
 
 void setup() {
+  Serial.begin(BAUD);
+
   servo_pan .attach(pin_pan , PWM_MIN, PWM_MAX);
   servo_tilt.attach(pin_tilt, PWM_MIN, PWM_MAX);
 
-  Serial.begin(BAUD);
+  servo_pan .write(0);
+  servo_tilt.write(0);
+  delay(2000);
 }
 
+/** Scan a 3D object
+ * Loop pan angle from 0 to 180, loop tilt angle from 0 to 180 then 180 to 0
+ * for each pan angle. Send the data to Python after each movement.
+ */
 void loop() {
-  angle_pan  = 0;
-  angle_tilt = 0;
-  
-  servo_pan .write(0);
+  for(int angle_pan = 0; angle_pan <= 180; angle_pan+=2) {
+    int angle_tilt = 0;
 
-  for(int angle_pan = 0; angle_pan < 181; angle_pan++) {
     servo_pan.write(angle_pan);
-
-    for(int angle_tilt = 0; angle_tilt < 181; angle_tilt++) {
+    for(; angle_tilt <= 180; angle_tilt++) {
       servo_tilt.write(angle_tilt);
       delay(DELAY);
-      write(angle_pan, angle_tilt * 2, analogRead(pin_ir));
+      send(angle_pan * 2, angle_tilt, analogRead(pin_ir));
+    }
+
+    servo_pan.write(angle_pan+1);
+    for(; angle_tilt >= 0; angle_tilt--) {
+      servo_tilt.write(angle_tilt);
+      delay(DELAY);
+      send((angle_pan+1) * 2, angle_tilt, analogRead(pin_ir));
     }
   }
 
