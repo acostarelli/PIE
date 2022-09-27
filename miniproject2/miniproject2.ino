@@ -55,14 +55,14 @@ void loop() {
     for(; angle_tilt <= 180; angle_tilt++) {
       servo_tilt.write(angle_tilt);
       delay(DELAY);
-      send(angle_pan * 2, angle_tilt, analogRead(pin_ir));
+      send(angle_pan, angle_tilt, analogRead(pin_ir));
     }
 
     servo_pan.write(angle_pan+1);
     for(; angle_tilt >= 0; angle_tilt--) {
       servo_tilt.write(angle_tilt);
       delay(DELAY);
-      send((angle_pan+1) * 2, angle_tilt, analogRead(pin_ir));
+      send((angle_pan+1), angle_tilt, analogRead(pin_ir));
     }
   }
 

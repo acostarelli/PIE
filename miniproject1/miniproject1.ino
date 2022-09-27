@@ -87,7 +87,7 @@ void loop() {
   switch (mode_i) {
     case 0: /** All off */
       break;
-    case 1: /** ALl on */
+    case 1: /** All on */
       writeall(HIGH, HIGH, HIGH);
 
       break;
@@ -110,7 +110,7 @@ void loop() {
     case 4: /** "Wave" */
       /** Cycle between 4 states.
        * LED1 is always on.
-       * LED2 is on except during during state 0.
+       * LED2 is on except during state 0.
        * LED3 is only on during state 3. */
       static int state = 0;
       writeall(HIGH, state ? HIGH : LOW, state == 2 ? HIGH : LOW);
