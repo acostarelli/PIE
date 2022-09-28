@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import serial
 
+import interp
 #ser = serial.Serial('COM4')
 
 from pprint import pprint
@@ -31,8 +32,8 @@ def poltocart(angle_pan, angle_tilt, hypot):
     """Converts polar to cartesian."""
     #x = hypot * sin(angle_pan  - PAN_NAUGHT)
     #y = hypot * sin(angle_tilt - TILT_NAUGHT)
-    x = hypot * cos(angle_pan)
-    y = hypot * cos(angle_tilt)
+    x = hypot * interp.panterp(angle_pan)
+    y = hypot * interp.tilterp(angle_tilt)
 
     return (x, y)
 
@@ -62,7 +63,7 @@ if __name__ == "__main__":
 
     for line in src:
         try:
-            angle_pan, angle_tilt, sensor = map(int, line.split())
+            angle_pan, angle_tilt, sensor = map(float, line.split())
             if angle_pan == 120 and angle_tilt == 75:
                 break
         except:
