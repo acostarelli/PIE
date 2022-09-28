@@ -29,7 +29,7 @@ def getdata(loc):
         with serial.Serial(loc, 9600, timeout=1000) as ser:
             while True:
                 try:
-                    yield map(float, ser.readline().split)
+                    yield list(map(float, ser.readline().split()))
                 except serial.serialutil.SerialException as e:
                     print("Closing serial port.")
                     print(e)
