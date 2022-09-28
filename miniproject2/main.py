@@ -58,6 +58,6 @@ if __name__ == "__main__":
     graph(data)
 
     if sys.argv[1] == "save":
-        with open(f"{round(time.time())}.pickle", "wb") as f:
+        with open(f"{sys.argv[2]}.pickle", "wb") as f:
             data = {(p[0], p[1]): p[2] for p in data}
             pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
