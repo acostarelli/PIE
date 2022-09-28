@@ -53,6 +53,11 @@ def graph(data):
     ax.scatter(X, Y, Z)
     plt.show()
 
+    X = [x - min(X) for x in X]
+    fig, ax = plt.subplots()
+    ax.scatter(Y, Z, alpha=[(max(X) - x) / max(X) for x in X])
+    plt.show()
+
 if __name__ == "__main__":
     data = getdata(PORT) if sys.argv[1] != "load" else getdata(sys.argv[2])
     graph(data)
