@@ -1,6 +1,6 @@
-import api
 import math
 import matplotlib.pyplot as plt
+import pickle
 import pprint
 import sys
 import time
@@ -54,7 +54,7 @@ def graph(data):
     plt.show()
 
 if __name__ == "__main__":
-    data = api.getdata(PORT) if sys.argv[1] != "load" else api.getdata(sys.argv[2])
+    data = getdata(PORT) if sys.argv[1] != "load" else getdata(sys.argv[2])
     graph(data)
 
     if sys.argv[1] == "save":

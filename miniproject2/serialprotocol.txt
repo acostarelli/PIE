@@ -1,7 +1,0 @@
-Arduino sends messages in ASCII.
-
-Message looks like (brackets not included):
-    [pan angle; integer] [tilt angle; integer] [voltage; integer]
-    [pan angle; integer] [tilt angle; integer] [voltage; integer]
-    ...
-    done

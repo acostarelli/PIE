@@ -1,6 +1,0 @@
-Useful links:
- * Servo library: https://www.arduino.cc/reference/en/libraries/servo/
- * Servo examples: https://docs.arduino.cc/learn/electronics/servo-motors
- * Assignment page: https://canvas.olin.edu/courses/441/assignments/6981?module_item_id=8812
- * Servo specs: http://www.vigorprecision.com.hk/uploadfile/20120530/20120530145808454.pdf
- * IR specs: https://canvas.olin.edu/courses/441/files/79959?wrap=1
