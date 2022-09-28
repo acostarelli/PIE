@@ -30,7 +30,9 @@ def getdata(loc):
             while True:
                 try:
                     yield map(float, ser.readline().split)
-                except:
+                except serial.serialutil.SerialException as e:
+                    print("Closing serial port.")
+                    print(e)
                     break
 
     elif loc[-7:] == ".pickle":
