@@ -36,27 +36,20 @@ def poltocart(angle_pan, angle_tilt, hypot):
     #y = hypot * interp.tilterp(angle_tilt)
     #x = hypot * cos(angle_pan)
     #y = hypot * cos(angle_tilt)
-    #x = hypot * panterp(angle_pan)
-    #y = hypot * tilterp(angle_tilt)
-    #print(y)
+    #x = hypot * sin(angle_pan - PAN_MID)
+    #y = hypot * sin(angle_tilt - TILT_MID)
+    #x = pinterp(angle_pan)
+    #y = tinterp(angle_tilt)
+    x = panterp(angle_pan)
+    y = tilterp(angle_tilt)
 
-    angle_pan = angle_pan - PAN_MID
-    angle_tilt  = angle_tilt - TILT_MID
-    xs = hypot * math.sin(angle_tilt) * math.sin(angle_pan)
-    ys = hypot * math.sin(angle_tilt) * math.cos(angle_pan)
-    zs = hypot * math.cos(angle_tilt)
-
-    return (xs, ys, zs)
+    return (x, y)
 
 def graph(X, Y, Z):
     """Create plot. """
-    #fig, ax = plt.subplots()
-    #m = max(Z)
-    #ax.scatter(X, Y, alpha=[(m-z)/m for z in Z])
-    #plt.show()
-    fig = plt.figure()
-    ax = fig.add_subplot(projection="3d")
-    ax.scatter(X, Y, Z)
+    fig, ax = plt.subplots()
+    m = max(Z)
+    ax.scatter(X, Y, alpha=[(m-z)/m for z in Z])
     plt.show()
 
 def fromfile():
@@ -74,25 +67,18 @@ def fromserial():
             break
 
 if __name__ == "__main__":
-    data = []#{}
+    with open("data.pickle", "rb") as f:
+        p = pickle.load(f)
 
-    for line in fromserial():
-        try:
-            angle_pan, angle_tilt, sensor = map(float, line.split())
-            print(angle_pan, angle_tilt, sensor)
-            if angle_pan == PAN_MAX and angle_tilt == TILT_MIN:
-                break
-        except:
-            continue
+    data = []
 
-        angle_pan = radians(angle_pan)
-        angle_tilt = radians(angle_tilt)
-        sensor = transfer(sensor)
-        x, y, z = poltocart(angle_pan, angle_tilt, sensor)
-        data.append([x, y, z])
-        #data[(x, y)] = sensor
+    for pt in p:
+        angle_pan, angle_tilt, sensor = pt
 
-    #with open("data3.pickle", "wb") as f:
-    #    pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
-    #pprint(data)
+        #angle_pan  = radians(angle_pan)
+        #angle_tilt = radians(angle_tilt)
+        sensor     = transfer(sensor)
+        x, y = poltocart(angle_pan, angle_tilt, sensor)
+        data.append([x, y, sensor])
+
     graph(*zip(*data))
