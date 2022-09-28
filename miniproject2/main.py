@@ -29,7 +29,11 @@ def getdata(loc):
         with serial.Serial(loc, 9600, timeout=1000) as ser:
             while True:
                 try:
-                    yield list(map(float, ser.readline().split()))
+                    pan, tilt, sensor = map(float, ser.readline().split())
+                    yield [pan, tilt, sensor]
+
+                    if pan == 110 and tilt == 50:
+                        break
                 except serial.serialutil.SerialException as e:
                     print("Closing serial port.")
                     print(e)
