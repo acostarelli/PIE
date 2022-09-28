@@ -23,6 +23,23 @@ def spheretocart(angle_pan, angle_tilt, hypot):
 
     return (x, y, z)
 
+def getdata(loc):
+    if loc[:3] == "COM":
+        with serial.Serial(loc, 9600, timeout=1000) as ser:
+            while True:
+                try:
+                    yield map(float, ser.readline().split)
+                except:
+                    break
+
+    elif loc[-7:] == ".pickle":
+        with open(loc, "rb") as f:
+            data = pickle.load(f)
+            yield from [[a[0], a[1], b] for a, b in data.items()]
+
+    else:
+        raise ValueError("Unsupported file type.")
+
 def graph(data):
     data = [
         spheretocart(math.radians(p[0]), math.radians(p[1]), transfer(p[2]))
