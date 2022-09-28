@@ -4,7 +4,7 @@ from time import time
 import serial
 
 # Depends on serial port
-ser = serial.Serial('COM7')
+ser = serial.Serial('COM4')
 
 f = open("df.csv", "w")
 writer = csv.writer(f, delimiter=',')

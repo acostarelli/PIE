@@ -9,15 +9,15 @@ cal = [440 20 ; 360 30 ; 280 40 ; 230 50 ; 190 60];
 xs = 0:1024;
 ys = t(xs);
 
-plot(xs, ys)
-plot(cal(:,1), cal(:,2), 'o')
+plot(cal(:,2), cal(:,1), 'o')
+plot(ys, xs)
 
 hold off
-xlim([0 1024])
-ylim([0 70])
-xlabel('Sensor reading')
-ylabel('Distance (cm)')
-legend({'Calibration data', '134e^(^-^0^.^0^0^4^x^)'})
+xlim([0 70])
+ylim([0 1024])
+xlabel('Distance (cm)')
+ylabel('Sensor reading')
+legend({'Calibration data'})
 title('Calibration Plot')
 
 figure
