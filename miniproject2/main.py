@@ -2,6 +2,7 @@ import math
 import matplotlib.pyplot as plt
 import pickle
 import pprint
+import serial
 import sys
 import time
 
