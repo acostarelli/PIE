@@ -26,6 +26,6 @@ void setup() {
 }
 
 void loop() {
-  motor_port->setSpeed(digitalRead(ir_port) == SEEING_BLACK ? SPEED_TURNING : SPEED_STRAIGHT);
-  motor_stbd->setSpeed(digitalRead(ir_stbd) == SEEING_BLACK ? SPEED_TURNING : SPEED_STRAIGHT);
+  motor_port->setSpeed(digitalRead(ir_stbd) == SEEING_BLACK ? SPEED_TURNING : SPEED_STRAIGHT);
+  motor_stbd->setSpeed(digitalRead(ir_port) == SEEING_BLACK ? SPEED_TURNING : SPEED_STRAIGHT);
 }
