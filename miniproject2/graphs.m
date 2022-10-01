@@ -17,7 +17,7 @@ xlim([0 70])
 ylim([0 1024])
 xlabel('Distance (cm)')
 ylabel('Sensor reading')
-legend({'Calibration data'})
+legend({'Calibration data', 'Transfer function'})
 title('Calibration Plot')
 
 figure
@@ -33,9 +33,10 @@ xlim([0 1024])
 ylim([0 70])
 xlabel('Sensor reading')
 ylabel('Distance (cm)')
-legend({'Test data', 'Transfer function'})
+legend({'Trasnfer function', 'Test data'})
 title('Error Plot')
 
+%{
 clear
 
 [X,Y] = meshgrid(linspace(0, 100), linspace(0, 100));
@@ -69,3 +70,5 @@ scatter(P(1, inside), P(2, inside), 'filled', 'MarkerFaceColor', 'red')
 scatter(Q(1, :), Q(2, :),  'filled', 'MarkerFaceColor', 'red')
 
 hold off
+
+%}
