@@ -54,3 +54,8 @@ void loop() {
     delay(100);
   }
 }
+
+// added in delays on turning
+// turning in place
+// different thresholds for each side
+// 
